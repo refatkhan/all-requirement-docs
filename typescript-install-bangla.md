@@ -228,7 +228,3 @@ npm install -D @types/jsonwebtoken
 
 <br/>
 
-<div align="center">
-  <h2>🎉 You're Now Ready!</h2>
-  <p>চাইলে আমি এগুলো দিয়ে তোমার জন্য একটি <b>full modular boilerplate (routes + controllers + services)</b> তৈরি করে দিতে পারি।</p>
-</div>
