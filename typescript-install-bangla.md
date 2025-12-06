@@ -1,110 +1,111 @@
-# 🚀 Express + TypeScript Basic Server Setup (Bangla Guide)
+<div align="center">
+  <h1>🚀 Express + TypeScript Starter Guide</h1>
+  <h3><i>Complete Bangla Documentation for Beginners</i></h3>
+</div>
 
-এখানে দেখানো হলো কীভাবে প্রথমবার Express + TypeScript ব্যবহার করে একটি বেসিক সার্ভার সেটআপ করতে হয়, কেন কোন ডিপেনডেন্সি লাগে, আর কীভাবে এগুলো কাজ করে।
+<br/>
 
----
+<div>
+  <p>
+    Express.js এবং TypeScript একসাথে ব্যবহার করলে প্রোজেক্ট আরও শক্তিশালী, নিরাপদ এবং Maintainable হয়।  
+    এই গাইডে তুমি শিখবে—
+  </p>
 
-## 🟦 ১) প্রোজেক্ট ইনিশিয়ালাইজ করা
+  <ul>
+    <li>Express + TypeScript সার্ভার সেটআপ</li>
+    <li>dotenv, bcrypt, cors, jwt এর ব্যবহার</li>
+    <li>tsconfig.json এর important সেটিং</li>
+    <li>Scripts & Folder Structure</li>
+  </ul>
+</div>
 
-প্রথমে একটা ফোল্ডার নাও, তারপর টার্মিনালে লিখো:
+<hr/>
 
-```bash
-npm init -y
-এতে তোমার প্রোজেক্টে একটি package.json তৈরি হবে।
+<section>
+  <h2>🟦 ১) প্রোজেক্ট ইনিশিয়ালাইজ করা</h2>
 
-🔹 "type" ফিল্ড কেন মুছবে?
-অনেক সময় নতুন প্রোজেক্টে package.json এ থাকে:
+  <pre><code>npm init -y</code></pre>
 
-json
-Copy code
-{
+  <p>এতে একটি <code>package.json</code> তৈরি হবে।</p>
+
+  <h3>🔹 "type" ফিল্ড কেন মুছবে?</h3>
+
+  <pre><code>{
   "type": "module"
-}
-আমরা TypeScript + Express-এর বেসিক সেটআপে সাধারণত CommonJS ব্যবহার করি (মানে require / module.exports সিস্টেম, যেটা কম্পাইল হওয়া জাভাস্ক্রিপ্টেও কাজ করে)।
+}</code></pre>
 
-➡️ তাই "type": "module" লাইনটা থাকলে মুছে দাও।
+  <p>
+    Express + TypeScript এর বেস সেটআপ সাধারণত CommonJS ভিত্তিক, তাই  
+    <code>"type": "module"</code> থাকলে মুছে ফেলতে হবে।
+  </p>
+</section>
 
-এতে Node ডিফল্টভাবে CommonJS ধরে নেবে, আর TypeScript থেকে কম্পাইল হওয়া কোড ঠিকভাবে রান করবে।
+<hr/>
 
-🟦 ২) Express ইনস্টল করা
-bash
-Copy code
-npm i express --save
---save মানে এটা dependencies সেকশনে যাবে এবং প্রডাকশনে লাগবে।
+<section>
+  <h2>🟦 ২) Express ইনস্টল করা</h2>
 
-TypeScript এর সাথে ব্যবহার করার জন্য Express-এর টাইপ দরকার:
+  <pre><code>npm install express</code></pre>
+  <pre><code>npm install -D @types/express</code></pre>
+</section>
 
-bash
-Copy code
-npm i -D @types/express
-এটা devDependencies এ থাকবে, কারণ শুধু টাইপ চেক করার সময় লাগে।
+<hr/>
 
-🟦 ৩) TypeScript ইনস্টল ও কনফিগার করা
-🔹 TypeScript ইনস্টল
-bash
-Copy code
-npm i -D typescript
-আরও সুবিধার জন্য এগুলো ইনস্টল করো:
+<section>
+  <h2>🟦 ৩) TypeScript ইনস্টল ও কনফিগার</h2>
 
-bash
-Copy code
-npm i -D ts-node-dev @types/node
-typescript → Type check + JS এ কম্পাইল করে
+  <pre><code>npm install -D typescript
+npm install -D ts-node-dev @types/node</code></pre>
 
-ts-node-dev → .ts ফাইল সরাসরি রান + auto reload
+  <h3>🔹 tsconfig তৈরি</h3>
 
-@types/node → Node.js এর টাইপ ডেফিনিশন
+  <pre><code>npx tsc --init</code></pre>
 
-🔹 tsconfig তৈরি করা
-bash
-Copy code
-npx tsc --init
-এতে tsconfig.json ফাইল তৈরি হবে।
+  <h3>🔹 tsconfig প্রয়োজনীয় সেটিং</h3>
 
-⚙️ tsconfig এ দরকারি সেটিং
-✔️ ১) rootDir এবং outDir সেট করা (Better Practice)
-jsonc
-Copy code
-{
+  <h4>✔️ rootDir & outDir সেট করো</h4>
+
+  <pre><code>{
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist"
   }
-}
-যদিও তুমি প্রথমে কমেন্ট রাখার কথা বলেছিলে,
-কিন্তু প্রফেশনাল প্রোজেক্টে এগুলো ঠিক করে সেট রাখাই ভালো।
+}</code></pre>
 
-✔️ ২) Output অপশনগুলো কমেন্ট রাখা
-json
-Copy code
-// "sourceMap": true,
-// "declaration": true
-✔️ ৩) Recommendation অপশন কমেন্ট করা
-json
-Copy code
-// "jsx": "preserve",
-// "verbatimModuleSyntax": true
-React বা JSX না থাকলে এগুলো লাগবে না।
+  <h4>✔️ অপ্রয়োজনীয় options কমেন্ট করো</h4>
 
-🟦 ৪) ফোল্ডার স্ট্রাকচার
-pgsql
-Copy code
-project-folder/
+  <pre><code>// "sourceMap": true,
+// "declaration": true</code></pre>
+
+  <h4>✔️ jsx এবং verbatimModuleSyntax কমেন্ট করো</h4>
+
+  <pre><code>// "jsx": "preserve",
+// "verbatimModuleSyntax": true</code></pre>
+</section>
+
+<hr/>
+
+<section>
+  <h2>🟦 ৪) Folder Structure</h2>
+
+  <pre><code>project/
  ├─ src/
  │   └─ index.ts
  ├─ package.json
  └─ tsconfig.json
-🟦 ৫) প্রথম Express + TypeScript সার্ভার
-src/index.ts ফাইল তৈরি করো:
+</code></pre>
+</section>
 
-ts
-Copy code
-import express, { Request, Response } from "express";
+<hr/>
+
+<section>
+  <h2>🟦 ৫) Express + TypeScript সার্ভার</h2>
+
+  <pre><code>import express, { Request, Response } from "express";
 
 const app = express();
 const port = 3000;
 
-// JSON body parse করার জন্য
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
@@ -114,126 +115,120 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-এখন সার্ভার চালানোর ২টি উপায়:
-✔️ ডেভেলপমেন্ট:
-ts-node-dev দিয়ে .ts ফাইল সরাসরি রান হবে, auto reload হবে।
+</code></pre>
 
-✔️ প্রডাকশন:
-TypeScript → JavaScript বানানো হবে, তারপর Node দিয়ে রান।
+  <p>➡️ ডেভেলপমেন্ট: ts-node-dev</p>
+  <p>➡️ প্রডাকশন: tsc + node</p>
+</section>
 
-🟦 ৬) package.json এ স্ক্রিপ্ট সেট করা
-json
-Copy code
-"scripts": {
+<hr/>
+
+<section>
+  <h2>🟦 ৬) package.json Scripts</h2>
+
+<pre><code>{
+ "scripts": {
   "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
   "build": "tsc",
   "start": "node dist/index.js"
+ }
 }
-✔️ ডেভেলপমেন্ট রান:
-bash
-Copy code
-npm run dev
-✔️ প্রডাকশন বিল্ড:
-bash
-Copy code
-npm run build
+</code></pre>
+
+<h3>▶️ Development:</h3>
+<pre><code>npm run dev</code></pre>
+
+<h3>▶️ Production:</h3>
+<pre><code>npm run build
 npm start
-🟦 ৭) dotenv — কখন লাগবে, কীভাবে কাজ করে?
-✔️ কখন ব্যবহার করবে?
-যখন দরকার:
+</code></pre>
+</section>
 
-Database URL
+<hr/>
 
-JWT Secret
+<section>
+<h2>🟦 ৭) dotenv — Environment Variables</h2>
 
-API Keys
+<h3>ইনস্টল</h3>
+<pre><code>npm install dotenv</code></pre>
 
-Custom PORT
-
-তখন .env ফাইলে রাখতে হবে।
-
-🔹 ইনস্টল
-bash
-Copy code
-npm i dotenv
-🔹 ব্যবহার
-.env তৈরি:
-
-ini
-Copy code
-PORT=5000
-JWT_SECRET=my-secret
+<h3>.env ফাইল:</h3>
+<pre><code>PORT=5000
+JWT_SECRET=secret
 DB_URL=mongodb://...
-src/index.ts এ:
+</code></pre>
 
-ts
-Copy code
-import "dotenv/config";
-
+<h3>ব্যবহার</h3>
+<pre><code>import "dotenv/config";
 const port = process.env.PORT || 3000;
-কী করছে?
-.env থেকে সব ভ্যালু process.env এর ভিতরে সেট করে
+</code></pre>
 
-এগুলো কোডের বাইরে থাকে → secure configuration
+</section>
 
-🟦 ৮) bcrypt — কেন লাগবে, কখন লাগবে?
-✔️ কেন?
-Password কখনো plain text হিসেবে ডাটাবেজে রাখা যাবে না।
+<hr/>
 
-তাই bcrypt দিয়ে hash করতে হবে:
+<section>
+<h2>🟦 ৮) bcrypt — Password Hashing</h2>
 
-Register → Hash save
+<h3>ইনস্টল:</h3>
+<pre><code>npm install bcrypt
+npm install -D @types/bcrypt
+</code></pre>
 
-Login → bcrypt.compare দিয়ে মিলানো
+<h3>Hash + Compare:</h3>
+<pre><code>import bcrypt from "bcrypt";
 
-🔹 ইনস্টল
-bash
-Copy code
-npm i bcrypt
-npm i -D @types/bcrypt
-🔹 Hash + Compare উদাহরণ:
-ts
-Copy code
-import bcrypt from "bcrypt";
-
-const SALT_ROUNDS = 10;
-
-export async function hashPassword(plainPassword: string): Promise<string> {
-  return await bcrypt.hash(plainPassword, SALT_ROUNDS);
+export async function hashPassword(pass) {
+  return bcrypt.hash(pass, 10);
 }
 
-export async function comparePassword(
-  plainPassword: string,
-  hashedPassword: string
-): Promise<boolean> {
-  return await bcrypt.compare(plainPassword, hashedPassword);
+export async function comparePassword(plain, hashed) {
+  return bcrypt.compare(plain, hashed);
 }
-🟦 ৯) অন্য দরকারি ডিপেনডেন্সি
-✔️ cors
-React → Express ভিন্ন origin হলে লাগবে:
+</code></pre>
+</section>
 
-bash
-Copy code
-npm i cors
-npm i -D @types/cors
-Usage:
+<hr/>
 
-ts
-Copy code
-import cors from "cors";
-app.use(cors());
-✔️ morgan (logging)
-bash
-Copy code
-npm i morgan
-npm i -D @types/morgan
-ts
-Copy code
-import morgan from "morgan";
-app.use(morgan("dev"));
-✔️ jsonwebtoken (JWT auth)
-bash
-Copy code
-npm i jsonwebtoken
-npm i -D @types/jsonwebtoken
-Access + Refresh token বানাতে ব্যবহৃত হয়।
+<section>
+<h2>🟦 ৯) অন্যান্য দরকারি ডিপেনডেন্সি</h2>
+
+<h3>✔️ cors</h3>
+<pre><code>npm install cors
+npm install -D @types/cors
+</code></pre>
+
+<h3>✔️ morgan</h3>
+<pre><code>npm install morgan
+npm install -D @types/morgan
+</code></pre>
+
+<h3>✔️ jsonwebtoken</h3>
+<pre><code>npm install jsonwebtoken
+npm install -D @types/jsonwebtoken
+</code></pre>
+</section>
+
+<hr/>
+
+<section>
+<h2>📝 Quick Recap</h2>
+
+<ul>
+  <li>npm init -y</li>
+  <li>Install express + types</li>
+  <li>Install TypeScript + ts-node-dev</li>
+  <li>Setup tsconfig</li>
+  <li>Create basic server</li>
+  <li>Add dev/build/start scripts</li>
+  <li>Setup dotenv + bcrypt</li>
+  <li>Use cors / morgan / jwt when needed</li>
+</ul>
+</section>
+
+<br/>
+
+<div align="center">
+  <h2>🎉 You're Now Ready!</h2>
+  <p>চাইলে আমি এগুলো দিয়ে তোমার জন্য একটি <b>full modular boilerplate (routes + controllers + services)</b> তৈরি করে দিতে পারি।</p>
+</div>
