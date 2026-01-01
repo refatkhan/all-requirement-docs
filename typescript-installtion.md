@@ -1,92 +1,107 @@
-# 🚀 Express + TypeScript Starter Boilerplate
+<div align="center">
+  <h1>🚀 Express + TypeScript Starter Guide</h1>
+  <h3><i>Complete English Documentation for Beginners</i></h3>
+</div>
 
-A clean and beginner-friendly setup for running an **Express.js server with TypeScript**, **TSX auto-reload**, and essential backend utilities like **dotenv** and **bcrypt**.
+<br/>
 
----
+<div>
+  <p>
+    Using Express.js together with TypeScript makes your project more powerful, secure, and maintainable.  
+    In this guide, you will learn—
+  </p>
 
-## 📌 Features
-- Express.js with TypeScript  
-- Auto-reload using TSX  
-- Clean folder structure  
-- dotenv support  
-- bcrypt ready  
-- Easy scalability  
-- Beginner friendly
+  <ul>
+    <li>How to set up an Express + TypeScript server</li>
+    <li>How to use dotenv, bcrypt, cors, and jwt</li>
+    <li>Important tsconfig.json settings</li>
+    <li>Scripts & Folder Structure</li>
+  </ul>
+</div>
 
----
+<hr/>
 
-## 📁 Folder Structure
+<section>
+  <h2>🟦 1) Initialize the Project</h2>
 
-project/
-│
-├── src/
-│ └── server.ts
-│
-├── .gitignore
-├── package.json
-├── tsconfig.json
-└── README.md
+  <pre><code>npm init -y</code></pre>
 
+  <p>This will create a <code>package.json</code> file.</p>
 
----
+  <h3>🔹 Why remove the "type" field?</h3>
 
-## 🛠️ Step 1: Initialize Project
+  <pre><code>{
+  "type": "module"
+}</code></pre>
 
-```bash
-npm init -y
+  <p>
+    The basic Express + TypeScript setup is usually based on CommonJS,  
+    so if <code>"type": "module"</code> exists, it should be removed.
+  </p>
+</section>
 
+<hr/>
 
-This will create a package.json file.
+<section>
+  <h2>🟦 2) Install Express</h2>
 
-🔹 Remove "type": "module"
+  <pre><code>npm install express</code></pre>
+  <pre><code>npm install -D @types/express</code></pre>
+</section>
 
-If your package.json contains this:
+<hr/>
 
-"type": "module"
+<section>
+  <h2>🟦 3) Install & Configure TypeScript</h2>
 
+  <pre><code>npm install -D typescript
+npm install -D ts-node-dev @types/node</code></pre>
 
-Remove it to avoid import/export conflicts.
+  <h3>🔹 Create tsconfig</h3>
 
-🛠️ Step 2: Install Express
-npm i express --save
+  <pre><code>npx tsc --init</code></pre>
 
+  <h3>🔹 Required tsconfig settings</h3>
 
-Install Express TypeScript types:
+  <h4>✔️ Set rootDir & outDir</h4>
 
-npm i -D @types/express
+  <pre><code>{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  }
+}</code></pre>
 
-🛠️ Step 3: Install TypeScript
-npm i -D typescript
+  <h4>✔️ Comment unnecessary options</h4>
 
+  <pre><code>// "sourceMap": true,
+// "declaration": true</code></pre>
 
-Create TypeScript config:
+  <h4>✔️ Comment jsx and verbatimModuleSyntax</h4>
 
-npx tsc --init
+  <pre><code>// "jsx": "preserve",
+// "verbatimModuleSyntax": true</code></pre>
+</section>
 
-⚙️ tsconfig.json Configuration
-✔️ 1) Comment out rootDir and outDir
- // "rootDir": "./src",
- // "outDir": "./dist",
+<hr/>
 
-✔️ 2) Comment out unnecessary output options
- // "sourceMap": true,
- // "declaration": true,
+<section>
+  <h2>🟦 4) Folder Structure</h2>
 
-✔️ 3) From Recommendation options, comment out:
- // "jsx": "preserve",
- // "verbatimModuleSyntax": true,
+  <pre><code>project/
+ ├─ src/
+ │   └─ index.ts
+ ├─ package.json
+ └─ tsconfig.json
+</code></pre>
+</section>
 
-🛠️ Step 4: Install TSX (Auto Reload for TypeScript)
-npm i -D tsx
+<hr/>
 
+<section>
+  <h2>🟦 5) Express + TypeScript Server</h2>
 
-TSX will run .ts files directly with auto-reload support.
-
-🛠️ Step 5: Create Your First Server
-
-Create file: src/server.ts
-
-import express, { Request, Response } from "express";
+  <pre><code>import express, { Request, Response } from "express";
 
 const app = express();
 const port = 3000;
@@ -94,61 +109,126 @@ const port = 3000;
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello from Express + TypeScript + TSX!");
+  res.send("Hello TypeScript + Express!");
 });
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
+</code></pre>
 
-🛠️ Step 6: Add Dev Script
+  <p>➡️ Development: ts-node-dev</p>
+  <p>➡️ Production: tsc + node</p>
+</section>
 
-Inside package.json → "scripts":
+<hr/>
 
-"scripts": {
-  "dev": "tsx watch ./src/server.ts"
+<section>
+  <h2>🟦 6) package.json Scripts</h2>
+
+<pre><code>{
+ "scripts": {
+  "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+  "build": "tsc",
+  "start": "node dist/index.js"
+ }
+}
+</code></pre>
+
+<h3>▶️ Development:</h3>
+<pre><code>npm run dev</code></pre>
+
+<h3>▶️ Production:</h3>
+<pre><code>npm run build
+npm start
+</code></pre>
+</section>
+
+<hr/>
+
+<section>
+<h2>🟦 7) dotenv — Environment Variables</h2>
+
+<h3>Install</h3>
+<pre><code>npm install dotenv</code></pre>
+
+<h3>.env file:</h3>
+<pre><code>PORT=5000
+JWT_SECRET=secret
+DB_URL=mongodb://...
+</code></pre>
+
+<h3>Usage</h3>
+<pre><code>import "dotenv/config";
+const port = process.env.PORT || 3000;
+</code></pre>
+
+</section>
+
+<hr/>
+
+<section>
+<h2>🟦 8) bcrypt — Password Hashing</h2>
+
+<h3>Install:</h3>
+<pre><code>npm install bcrypt
+npm install -D @types/bcrypt
+</code></pre>
+
+<h3>Hash + Compare:</h3>
+<pre><code>import bcrypt from "bcrypt";
+
+export async function hashPassword(pass) {
+  return bcrypt.hash(pass, 10);
 }
 
+export async function comparePassword(plain, hashed) {
+  return bcrypt.compare(plain, hashed);
+}
+</code></pre>
+</section>
 
-Run development server:
+<hr/>
 
-npm run dev
+<section>
+<h2>🟦 9) Other Useful Dependencies</h2>
 
-🌿 Using dotenv (Environment Variables)
-Install dotenv
-npm i dotenv
+<h3>✔️ cors</h3>
+<pre><code>npm install cors
+npm install -D @types/cors
+</code></pre>
 
+<h3>✔️ morgan</h3>
+<pre><code>npm install morgan
+npm install -D @types/morgan
+</code></pre>
 
-Create .env file:
+<h3>✔️ jsonwebtoken</h3>
+<pre><code>npm install jsonwebtoken
+npm install -D @types/jsonwebtoken
+</code></pre>
+</section>
 
-PORT=5000
+<hr/>
 
+<section>
+<h2>📝 Quick Recap</h2>
 
-Update server.ts:
+<ul>
+  <li>npm init -y</li>
+  <li>Install express + types</li>
+  <li>Install TypeScript + ts-node-dev</li>
+  <li>Set up tsconfig</li>
+  <li>Create a basic server</li>
+  <li>Add dev/build/start scripts</li>
+  <li>Set up dotenv + bcrypt</li>
+  <li>Use cors / morgan / jwt when needed</li>
+</ul>
+</section>
 
-import "dotenv/config";
+<br/>
 
-const port = process.env.PORT || 3000;
-
-🔐 Using bcrypt (Password Hashing)
-Install bcrypt
-npm i bcrypt
-npm i -D @types/bcrypt
-
-Usage example
-import bcrypt from "bcrypt";
-
-const hashPassword = async (password: string) => {
-  return await bcrypt.hash(password, 10);
-};
-
-const comparePassword = async (plain: string, hashed: string) => {
-  return await bcrypt.compare(plain, hashed);
-};
-
-▶️ Run the Project
-Development Mode
-npm run dev
-
-
-TSX will auto-restart the server on file changes.
+<div align="center">
+  <h2>🎉 You're Now Ready!</h2>
+  <p>If you want, I can create a <b>full modular boilerplate (routes + controllers + services)</b> for you using this setup.</p>
+</div>
